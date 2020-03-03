@@ -1,5 +1,7 @@
 import datetime
 import sys
+import threading
+import time
 
 import requests
 from PyQt5 import uic
@@ -13,51 +15,35 @@ class App(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("서버시간 알리미")
         self.ui = uic.loadUi(UIFILE, self)
-
+        self.setWindowTitle("서버시간 알리미")
         self.show()
 
     def siteButton(self):
         '''GO! 버튼이 눌렸을 때 실행'''
-        #QMessageBox().information(title="경고", text="페이지를 입력해 주세요!")
-        self.query = Query(self.url.toPlainText())
+        url = self.url.toPlainText()
+        if(url):
+            self.query = Query(self.url.toPlainText(), self)
+            threading.Thread(target=self.severTimeThread, daemon=True)
+        else:
+            #QMessageBox().information(title="경고", text="페이지를 입력해 주세요!")
+            return
+        
 
+    def severTimeThread(self):
+        pass
 
 class Query:
-    day={
-        "Mon" : "월",
-        "Tue" : "화",
-        "Wed" : "수",
-        "Thu" : "목",
-        "Fri" : "금",
-        "Sat" : "토",
-        "Sun" : "일"
-    }
-    month={
-        "Jan" : 1,
-        "Feb" : 2,
-        "Mar" : 3,
-        "Apr" : 4,
-        "May" : 5,
-        "Jun" : 6,
-        "Jul" : 7,
-        "Aug" : 8,
-        "Sep" : 9,
-        "Oct" : 10,
-        "Nov" : 11,
-        "Dec" : 12
-    }
-    headers = {
-    "user-agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36"
-    }
-    def __init__(self, URL):
+
+    def __init__(self, URL, App):
+        self.App = App
         self.__syncTime(URL)
 
     def __syncTime(self, URL):
         '''서버와의 시간을 동조'''
         req = requests.get(URL)
         originSec = req.headers["Date"][23:25]
+        self.App.progressBar.setValue(10)
         #지연된 시간
         elapsedTime = req.elapsed
         cnt = 1
@@ -69,6 +55,7 @@ class Query:
             cnt += 1
             if(originSec != laterSec):
                 break
+            self.App.progressBar.setValue(54)
         
         elapsedTime /= cnt
         self.__setTime(req.headers['Date'])
@@ -77,6 +64,8 @@ class Query:
         '''String 시간을 ms로 전환'''
         #서울, 도쿄를 기준으로 +9시간
         koreanTime = datetime.datetime.strptime(stringTime, "%a, %d %b %Y %X GMT") + datetime.timedelta(hours=9)
+        self.timeDelta = koreanTime - datetime.datetime.now()
+        self.App.progressBar.setValue(70)
 
 
     def getYear(self):
