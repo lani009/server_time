@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="query">
     <property name="geometry">
      <rect>
       <x>610</x>
@@ -106,7 +106,7 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="url">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -172,7 +172,7 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>query</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>siteButton()</slot>
@@ -190,5 +190,6 @@ p, li { white-space: pre-wrap; }
  </connections>
  <slots>
   <slot>siteButton()</slot>
+  <slot>d(QTextCharFormat)</slot>
  </slots>
 </ui>
