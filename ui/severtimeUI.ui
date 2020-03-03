@@ -57,7 +57,7 @@
       <x>30</x>
       <y>96</y>
       <width>741</width>
-      <height>51</height>
+      <height>82</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="infoLayout" rowstretch="2" columnstretch="0,1">
@@ -114,7 +114,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QTextBrowser" name="textBrowser_4"/>
+      <widget class="QTextBrowser" name="severTime"/>
      </item>
     </layout>
    </widget>
