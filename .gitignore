@@ -3,8 +3,12 @@
 
 test.py
 
+배포
+
 #pyinstaller
 __pycache__
 build
 dist
 *.spec
+*.exe
+*.zip
