@@ -6,12 +6,15 @@ import time
 import requests
 from PyQt5 import uic
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 UIFILE = '../ui/severtimeUI.ui'
+ICON = '../ui/icon.png'
 class App(QMainWindow):
 
     clockSignal = pyqtSignal()
+    reclick = False
 
     def __init__(self):
         super().__init__()
@@ -21,36 +24,48 @@ class App(QMainWindow):
     def initUI(self):
         self.ui = uic.loadUi(UIFILE, self)
         self.setWindowTitle("서버시간 알리미")
+        self.setWindowIcon(QIcon(ICON))
+        self.opacity = QGraphicsOpacityEffect(self.progressBar) #Progress Bar의 투명도 조절을 위함
+        self.opacity.setOpacity(0.0)    #시작 시에는 Progress Bar 안보이도록 처리
+        self.progressBar.setGraphicsEffect(self.opacity)
         self.show()
 
     def siteButton(self):
         '''GO! 버튼이 눌렸을 때 실행'''
         url = self.url.toPlainText()
         if(url):
+            if self.reclick:
+                #Go버튼 재 클릭시 이전에 생성한 thread 종료를 위함.
+                self.clock.working = False
+            self.reclick = True
+            self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
             self.query = Query(self.url.toPlainText(), self)    #query를 통해 서버 시간을 받아온다.
             self.clock = severClock(self, self.query)   #severClock에게 인수 전달. thread실행시킬 준비를 한다.
             self.clockSignal.connect(self.clock.run)    #custom signal from main to thread
             self.clock.clockChanged.connect(self.updateClock)   #custom signal from thread to main
             self.clock.start() #start the thread
             self.progressBar.setValue(100)
+            self.opacity.setOpacity(0.0)    #progress bar 투명화
+            self.progressBar.setGraphicsEffect(self.opacity)
         else:
-            #QMessageBox().information(title="경고", text="페이지를 입력해 주세요!")
+            QMessageBox().critical(self, "경고", "주소창을 채워주세요!")
             return
 
     def updateClock(self, severTime):
         self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
 
 class severClock(QThread):
-    
+    working = False
     clockChanged = pyqtSignal(datetime.datetime)
 
     def __init__(self, App, query):
         super().__init__()
         self.App = App
         self.query = query
+        self.working = True
 
     def run(self):
-        while True:
+        while self.working:
             severTime = self.query.getTime()
             self.clockChanged.emit(severTime)
             time.sleep(0.1)
@@ -79,7 +94,6 @@ class Query:
             if(originSec != laterSec):
                 break
             self.__App.progressBar.setValue(54)
-        
         elapsedTime /= cnt
         self.__setTime(req.headers['Date'])
 

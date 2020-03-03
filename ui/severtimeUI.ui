@@ -55,9 +55,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>96</y>
+      <y>80</y>
       <width>741</width>
-      <height>82</height>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="infoLayout" rowstretch="2" columnstretch="0,1">
@@ -114,7 +114,14 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QTextBrowser" name="severTime"/>
+      <widget class="QTextBrowser" name="severTime">
+       <property name="font">
+        <font>
+         <family>맑은 고딕</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -199,11 +206,11 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>677</x>
-     <y>98</y>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>721</x>
-     <y>94</y>
+     <x>731</x>
+     <y>58</y>
     </hint>
    </hints>
   </connection>
