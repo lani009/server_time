@@ -80,7 +80,7 @@ class App(QMainWindow):
             currentAlarmHour + 12
         self.alarmTime = datetime.datetime(
                 year=1, month=1, day=1,
-                hour=currentAlarmHour + 1, minute=currentAlarmMinute,second=currentAlarmSecond
+                hour=currentAlarmHour + 1 + currentAlarmNoon * 12, minute=currentAlarmMinute,second=currentAlarmSecond
         )
         self.alarmThread = threading.Thread(target=self.alarm)
         
