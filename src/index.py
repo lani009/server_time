@@ -68,10 +68,27 @@ class App(QMainWindow):
 
     def setAlarm(self):
         if not self.reclick:
+            #사이트 등록이 되어 있지 않으면, 경고뜸
             QMessageBox().critical(self, "경고", "사이트를 먼저 등록해 주세요.")
             return
         
-        self.doAlarm = True
+        if self.doAlarm:
+            alarmVerify = QMessageBox(self)
+            result = alarmVerify.question(self, "알람 취소", "알람을 취소하겠습니까?", QMessageBox.Yes | QMessageBox.No)
+            if result == QMessageBox.Yes:
+                self.doAlarm = False
+                self.alarmButton.setText("알람등록")
+            
+            return
+        else:
+            #알람설정 눌렀을 때 예 아니오 질문창
+            alarmVerify = QMessageBox(self)
+            result = alarmVerify.question(self, '알람 등록', '알람을 등록하시겠습니까?', QMessageBox.Yes | QMessageBox.No)
+            if result == QMessageBox.No:
+                return
+            self.alarmButton.setText("알람취소")
+        
+        self.doAlarm = True #시간 업데이트 될 때마다 알람 할지 말지. 플래그변수
         currentAlarmNoon = self.alarmNoon.currentIndex()
         currentAlarmHour = self.alarmHour.currentIndex()
         currentAlarmMinute = self.alarmMinute.currentIndex()
@@ -80,11 +97,13 @@ class App(QMainWindow):
             currentAlarmHour + 12
         self.alarmTime = datetime.datetime(
                 year=1, month=1, day=1,
-                hour=currentAlarmHour + 1 + currentAlarmNoon * 12, minute=currentAlarmMinute,second=currentAlarmSecond
+                hour=currentAlarmHour + 1, minute=currentAlarmMinute,second=currentAlarmSecond
         )
-        self.alarmThread = threading.Thread(target=self.alarm)
+        
+        self.alarmThread = threading.Thread(target=self.alarm)  #알람 울릴거 대비해서 미리 쓰레드 선언 해놓음
         
     def checkAlarm(self, severTime):
+        '''알람 울릴 시간이 되면, 알람 쓰레드 생성시킴.'''
         timeDelta = self.alarmTime - severTime
         if timeDelta.seconds <= 2:
             self.alarmThread.start()

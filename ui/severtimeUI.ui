@@ -190,7 +190,7 @@ p, li { white-space: pre-wrap; }
      <number>0</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="alarmButton">
     <property name="geometry">
      <rect>
       <x>98</x>
@@ -996,7 +996,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>query</tabstop>
   <tabstop>textBrowser_2</tabstop>
   <tabstop>severTime</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>alarmButton</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -1017,7 +1017,7 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>alarmButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>setAlarm()</slot>
@@ -1027,8 +1027,8 @@ p, li { white-space: pre-wrap; }
      <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>21</x>
-     <y>82</y>
+     <x>70</x>
+     <y>99</y>
     </hint>
    </hints>
   </connection>
