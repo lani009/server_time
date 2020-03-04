@@ -204,6 +204,11 @@ p, li { white-space: pre-wrap; }
       <family>맑은 고딕</family>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background:rgb(0, 255, 127);
+border: 1px solid black;
+border-radius:0.5em;</string>
+    </property>
     <property name="text">
      <string>알람등록</string>
     </property>
