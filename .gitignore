@@ -4,6 +4,7 @@
 test.py
 
 배포
+*.bat
 
 #pyinstaller
 __pycache__
