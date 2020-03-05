@@ -10,8 +10,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-UIFILE = '../ui/severtimeUI.ui'
-ICON = '../ui/icon.png'
+UIFILE = './ui/severtimeUI.ui'
+ICON = './ui/icon.png'
 class App(QMainWindow):
 
     clockSignal = pyqtSignal()
