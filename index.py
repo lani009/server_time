@@ -27,11 +27,36 @@ class App(QMainWindow):
         self.ui = uic.loadUi(UIFILE, self)
         self.setWindowTitle("서버시간 알리미 v0.1")
         self.setWindowIcon(QIcon(ICON))
+        #setFixedSize(width, height)로 입력을해주면 사용자가 창 크기를 변경 시킬 수 없습니다.
+
         self.opacity = QGraphicsOpacityEffect(self.progressBar) #Progress Bar의 투명도 조절을 위함
         self.opacity.setOpacity(0.0)    #시작 시에는 Progress Bar 안보이도록 처리
         self.progressBar.setGraphicsEffect(self.opacity)
+
         self.show()
 
+    @pyqtSlot()
+    def opacityChanged(self):
+        self.setWindowOpacity((120-self.opacitySlider.value()) / 100)
+    
+    @pyqtSlot(int)
+    def fixWindow(self, state):
+        flags = self.windowFlags()
+        if state == 2:
+            self.setWindowFlags(flags | Qt.X11BypassWindowManagerHint | Qt.WindowStaysOnTopHint)  
+        else:
+            self.setWindowFlags(flags & ~(Qt.X11BypassWindowManagerHint | Qt.WindowStaysOnTopHint))
+
+        self.show()
+
+    @pyqtSlot()
+    def isEnter(self):
+        text = self.url.toPlainText()
+        if '\n' in text:
+            self.url.setPlainText(text[0:len(text)-1])
+            self.siteButton()
+
+    @pyqtSlot()
     def siteButton(self):
         '''GO! 버튼이 눌렸을 때 실행'''
         self.progressBar.setValue(0)
@@ -63,12 +88,7 @@ class App(QMainWindow):
             QMessageBox().critical(self, "경고", "주소창을 채워주세요.")
             return
 
-    def updateClock(self, severTime):
-        self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
-        if self.doAlarm:
-            self.alarmTime = self.alarmTime.replace(year=severTime.year, month=severTime.month, day=severTime.day)
-            self.checkAlarm(severTime)
-
+    @pyqtSlot()
     def setAlarm(self):
         if not self.reclick:
             #사이트 등록이 되어 있지 않으면, 경고뜸
@@ -106,6 +126,13 @@ class App(QMainWindow):
         
         self.alarmThread = threading.Thread(target=self.alarm)  #알람 울릴거 대비해서 미리 쓰레드 선언 해놓음
         
+
+    def updateClock(self, severTime):
+        self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
+        if self.doAlarm:
+            self.alarmTime = self.alarmTime.replace(year=severTime.year, month=severTime.month, day=severTime.day)
+            self.checkAlarm(severTime)
+    
     def checkAlarm(self, severTime):
         '''알람 울릴 시간이 되면, 알람 쓰레드 생성시킴.'''
         timeDelta = self.alarmTime - severTime
