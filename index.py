@@ -34,6 +34,9 @@ class App(QMainWindow):
 
     def siteButton(self):
         '''GO! 버튼이 눌렸을 때 실행'''
+        self.progressBar.setValue(0)
+        self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
+        self.progressBar.setGraphicsEffect(self.opacity)
         url = self.url.toPlainText()
         if(url):
             if self.reclick:
@@ -44,9 +47,10 @@ class App(QMainWindow):
                 self.query = Query(self.url.toPlainText(), self)    #query를 통해 서버 시간을 받아온다.
             except Exception as e:
                 self.url.setText("")
+                print(e)
                 QMessageBox().critical(self, "주소로 부터 응답 없음", "옳지 않은 주소이거나, 인터넷 상태가 불량합니다")
                 return
-            self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
+
             self.clock = severClock(self, self.query)   #severClock에게 인수 전달. thread실행시킬 준비를 한다.
             self.clockSignal.connect(self.clock.run)    #custom signal from main to thread
             self.clock.clockChanged.connect(self.updateClock)   #custom signal from thread to main
@@ -157,9 +161,10 @@ class Query:
             laterSec = req.headers["Date"][23:25]
             elapsedTime += req.elapsed
             cnt += 1
+            QProgressBar.value
+            self.__App.progressBar.setValue(self.__App.progressBar.value() + 7)
             if(originSec != laterSec):
                 break
-            self.__App.progressBar.setValue(54)
         elapsedTime /= cnt
         self.__setTime(req.headers['Date'])
 
