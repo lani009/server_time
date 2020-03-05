@@ -2,13 +2,19 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>177</height>
+    <height>201</height>
    </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -121,6 +127,9 @@ p, li { white-space: pre-wrap; }
      </item>
      <item row="0" column="1">
       <widget class="QTextBrowser" name="severTime">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="font">
         <font>
          <family>맑은 고딕</family>
@@ -987,6 +996,87 @@ p, li { white-space: pre-wrap; }
      </property>
     </item>
    </widget>
+   <widget class="QSlider" name="opacitySlider">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>138</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>20</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="invertedControls">
+     <bool>false</bool>
+    </property>
+    <property name="tickPosition">
+     <enum>QSlider::NoTicks</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>143</y>
+      <width>56</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>맑은 고딕</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>투명도</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="fixCheck">
+    <property name="geometry">
+     <rect>
+      <x>302</x>
+      <y>139</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>맑은 고딕</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>화면고정</string>
+    </property>
+   </widget>
+   <zorder>label_4</zorder>
+   <zorder>query</zorder>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>url</zorder>
+   <zorder>progressBar</zorder>
+   <zorder>alarmButton</zorder>
+   <zorder>alarmNoon</zorder>
+   <zorder>alarmMinute</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>alarmHour</zorder>
+   <zorder>alarmSecond</zorder>
+   <zorder>opacitySlider</zorder>
+   <zorder>fixCheck</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1041,9 +1131,60 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>opacitySlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>opacityChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>url</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>isEnter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fixCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fixWindow(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>477</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>siteButton()</slot>
   <slot>setAlarm()</slot>
+  <slot>opacityChanged(int)</slot>
+  <slot>fixWindow(int)</slot>
+  <slot>isEnter()</slot>
  </slots>
 </ui>
