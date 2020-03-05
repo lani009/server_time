@@ -40,14 +40,13 @@ class App(QMainWindow):
                 #Go버튼 재 클릭시 이전에 생성한 thread 종료를 위함.
                 self.clock.working = False
             
-            self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
             try:
                 self.query = Query(self.url.toPlainText(), self)    #query를 통해 서버 시간을 받아온다.
             except Exception as e:
                 self.url.setText("")
                 QMessageBox().critical(self, "주소로 부터 응답 없음", "옳지 않은 주소이거나, 인터넷 상태가 불량합니다")
                 return
-            
+            self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
             self.clock = severClock(self, self.query)   #severClock에게 인수 전달. thread실행시킬 준비를 한다.
             self.clockSignal.connect(self.clock.run)    #custom signal from main to thread
             self.clock.clockChanged.connect(self.updateClock)   #custom signal from thread to main
