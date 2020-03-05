@@ -153,19 +153,19 @@ class Query:
         originSec = req.headers["Date"][23:25]
         self.__App.progressBar.setValue(10)
         #지연된 시간
-        elapsedTime = req.elapsed
+        #elapsedTime = req.elapsed
         cnt = 1
         while True:
             #서버로 부터 시간을 받아와 반복문을 통해 시간 오차를 줄인다.
             req = requests.get(URL)
             laterSec = req.headers["Date"][23:25]
-            elapsedTime += req.elapsed
+            #elapsedTime += req.elapsed
             cnt += 1
             QProgressBar.value
             self.__App.progressBar.setValue(self.__App.progressBar.value() + 7)
             if(originSec != laterSec):
                 break
-        elapsedTime /= cnt
+        #elapsedTime /= cnt
         self.__setTime(req.headers['Date'])
 
     def __setTime(self, stringTime):
