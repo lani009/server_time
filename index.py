@@ -92,8 +92,9 @@ class App(QMainWindow):
         currentAlarmHour = self.alarmHour.currentIndex()
         currentAlarmMinute = self.alarmMinute.currentIndex()
         currentAlarmSecond = self.alarmSecond.currentIndex()
+
         if currentAlarmNoon == 1:
-            currentAlarmHour + 12
+            currentAlarmHour += 12
         self.alarmTime = datetime.datetime(
                 year=1, month=1, day=1,
                 hour=currentAlarmHour + 1, minute=currentAlarmMinute,second=currentAlarmSecond
@@ -107,6 +108,7 @@ class App(QMainWindow):
         if timeDelta.seconds <= 2:
             self.alarmThread.start()
             self.doAlarm = False
+            self.alarmButton.setText("알람등록")
     
     def alarm(self):
         Beep(450,500)
