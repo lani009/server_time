@@ -27,7 +27,7 @@ class App(QMainWindow):
         self.ui = uic.loadUi(UIFILE, self)
         self.setWindowTitle("서버시간 알리미 v0.1")
         self.setWindowIcon(QIcon(ICON))
-        #setFixedSize(width, height)로 입력을해주면 사용자가 창 크기를 변경 시킬 수 없습니다.
+        self.setFixedSize(800, 200) #사이즈 고정
 
         self.opacity = QGraphicsOpacityEffect(self.progressBar) #Progress Bar의 투명도 조절을 위함
         self.opacity.setOpacity(0.0)    #시작 시에는 Progress Bar 안보이도록 처리
