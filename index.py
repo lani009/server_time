@@ -10,7 +10,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-UIFILE = './ui/severtimeUI.ui'
+UIFILE = './ui/servertimeUI.ui'
 ICON = './ui/icon.png'
 class App(QMainWindow):
 
@@ -76,7 +76,7 @@ class App(QMainWindow):
                 QMessageBox().critical(self, "주소로 부터 응답 없음", "옳지 않은 주소이거나, 인터넷 상태가 불량합니다")
                 return
 
-            self.clock = severClock(self, self.query)   #severClock에게 인수 전달. thread실행시킬 준비를 한다.
+            self.clock = serverClock(self, self.query)   #serverClock에게 인수 전달. thread실행시킬 준비를 한다.
             self.clockSignal.connect(self.clock.run)    #custom signal from main to thread
             self.clock.clockChanged.connect(self.updateClock)   #custom signal from thread to main
             self.clock.start() #start the thread
@@ -127,15 +127,15 @@ class App(QMainWindow):
         self.alarmThread = threading.Thread(target=self.alarm)  #알람 울릴거 대비해서 미리 쓰레드 선언 해놓음
         
 
-    def updateClock(self, severTime):
-        self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
+    def updateClock(self, serverTime):
+        self.serverTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(serverTime.year, serverTime.month, serverTime.day, serverTime.hour, serverTime.minute, serverTime.second))
         if self.doAlarm:
-            self.alarmTime = self.alarmTime.replace(year=severTime.year, month=severTime.month, day=severTime.day)
-            self.checkAlarm(severTime)
+            self.alarmTime = self.alarmTime.replace(year=serverTime.year, month=serverTime.month, day=serverTime.day)
+            self.checkAlarm(serverTime)
     
-    def checkAlarm(self, severTime):
+    def checkAlarm(self, serverTime):
         '''알람 울릴 시간이 되면, 알람 쓰레드 생성시킴.'''
-        timeDelta = self.alarmTime - severTime
+        timeDelta = self.alarmTime - serverTime
         if timeDelta.seconds <= 2:
             self.alarmThread.start()
             self.doAlarm = False
@@ -151,7 +151,7 @@ class App(QMainWindow):
         Beep(880,1500)
 
 
-class severClock(QThread):
+class serverClock(QThread):
 
     working = False
     clockChanged = pyqtSignal(datetime.datetime)
@@ -164,8 +164,8 @@ class severClock(QThread):
 
     def run(self):
         while self.working:
-            severTime = self.query.getTime()
-            self.clockChanged.emit(severTime)
+            serverTime = self.query.getTime()
+            self.clockChanged.emit(serverTime)
             time.sleep(0.1)
 
 class Query:
@@ -203,8 +203,8 @@ class Query:
         self.__App.progressBar.setValue(70)
 
     def getTime(self):
-        severTime = self.__timeDelta + datetime.datetime.now()
-        return severTime
+        serverTime = self.__timeDelta + datetime.datetime.now()
+        return serverTime
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
