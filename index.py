@@ -25,7 +25,7 @@ class App(QMainWindow):
 
     def initUI(self):
         self.ui = uic.loadUi(UIFILE, self)
-        self.setWindowTitle("서버시간 알리미 v0.3")
+        self.setWindowTitle("서버시간 알리미 v0.1")
         self.setWindowIcon(QIcon(ICON))
         #setFixedSize(width, height)로 입력을해주면 사용자가 창 크기를 변경 시킬 수 없습니다.
 
