@@ -10,8 +10,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-UIFILE = './ui/servertimeUI.ui'
+UIFILE = './ui/severTimeUI.ui'
 ICON = './ui/icon.png'
+__AUTHOR__="Lani"
 class App(QMainWindow):
 
     clockSignal = pyqtSignal()
@@ -60,10 +61,11 @@ class App(QMainWindow):
     def siteButton(self):
         '''GO! 버튼이 눌렸을 때 실행'''
         self.progressBar.setValue(0)
-        self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
-        self.progressBar.setGraphicsEffect(self.opacity)
+        self.progressBar.setValue(0)
         url = self.url.toPlainText()
         if(url):
+            self.opacity.setOpacity(1.0) #Go 버튼 클릭시 Progress Bar 활성화
+            self.progressBar.setGraphicsEffect(self.opacity)
             if self.reclick:
                 #Go버튼 재 클릭시 이전에 생성한 thread 종료를 위함.
                 self.clock.working = False
@@ -74,6 +76,9 @@ class App(QMainWindow):
                 self.url.setText("")
                 print(e)
                 QMessageBox().critical(self, "주소로 부터 응답 없음", "옳지 않은 주소이거나, 인터넷 상태가 불량합니다")
+                self.progressBar.setValue(100)
+                self.opacity.setOpacity(0.0) #Go 버튼 클릭시 Progress Bar 활성화
+                self.progressBar.setGraphicsEffect(self.opacity)
                 return
 
             self.clock = serverClock(self, self.query)   #serverClock에게 인수 전달. thread실행시킬 준비를 한다.
@@ -127,15 +132,15 @@ class App(QMainWindow):
         self.alarmThread = threading.Thread(target=self.alarm)  #알람 울릴거 대비해서 미리 쓰레드 선언 해놓음
         
 
-    def updateClock(self, serverTime):
-        self.serverTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(serverTime.year, serverTime.month, serverTime.day, serverTime.hour, serverTime.minute, serverTime.second))
+    def updateClock(self, severTime):
+        self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
         if self.doAlarm:
-            self.alarmTime = self.alarmTime.replace(year=serverTime.year, month=serverTime.month, day=serverTime.day)
-            self.checkAlarm(serverTime)
+            self.alarmTime = self.alarmTime.replace(year=severTime.year, month=severTime.month, day=severTime.day)
+            self.checkAlarm(severTime)
     
-    def checkAlarm(self, serverTime):
+    def checkAlarm(self, severTime):
         '''알람 울릴 시간이 되면, 알람 쓰레드 생성시킴.'''
-        timeDelta = self.alarmTime - serverTime
+        timeDelta = self.alarmTime - severTime
         if timeDelta.seconds <= 2:
             self.alarmThread.start()
             self.doAlarm = False
@@ -164,8 +169,8 @@ class serverClock(QThread):
 
     def run(self):
         while self.working:
-            serverTime = self.query.getTime()
-            self.clockChanged.emit(serverTime)
+            severTime = self.query.getTime()
+            self.clockChanged.emit(severTime)
             time.sleep(0.1)
 
 class Query:
@@ -176,35 +181,35 @@ class Query:
 
     def __syncTime(self, URL):
         '''서버와의 시간을 동조'''
-        req = requests.get(URL)
+        req = requests.get(URL+"/fjdksla")
         originSec = req.headers["Date"][23:25]
         self.__App.progressBar.setValue(10)
         #지연된 시간
-        #elapsedTime = req.elapsed
+        self.elapsedTime = req.elapsed
         cnt = 1
         while True:
             #서버로 부터 시간을 받아와 반복문을 통해 시간 오차를 줄인다.
             req = requests.get(URL)
             laterSec = req.headers["Date"][23:25]
-            #elapsedTime += req.elapsed
+            self.elapsedTime += req.elapsed
             cnt += 1
             QProgressBar.value
             self.__App.progressBar.setValue(self.__App.progressBar.value() + 7)
             if(originSec != laterSec):
                 break
-        #elapsedTime /= cnt
+        self.elapsedTime /= cnt
         self.__setTime(req.headers['Date'])
 
     def __setTime(self, stringTime):
         '''String 시간을 ms로 전환'''
         #서울, 도쿄를 기준으로 +9시간
-        koreanTime = datetime.datetime.strptime(stringTime, "%a, %d %b %Y %X GMT") + datetime.timedelta(hours=9)
+        koreanTime = datetime.datetime.strptime(stringTime, "%a, %d %b %Y %X GMT") + datetime.timedelta(hours=9) - self.elapsedTime
         self.__timeDelta = koreanTime - datetime.datetime.now()
         self.__App.progressBar.setValue(70)
 
     def getTime(self):
-        serverTime = self.__timeDelta + datetime.datetime.now()
-        return serverTime
+        severTime = self.__timeDelta + datetime.datetime.now()
+        return severTime
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
