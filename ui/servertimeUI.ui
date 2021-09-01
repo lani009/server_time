@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>201</height>
+    <height>210</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -69,7 +69,7 @@
       <x>30</x>
       <y>80</y>
       <width>741</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="infoLayout" rowstretch="2" columnstretch="0,1">
@@ -999,8 +999,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QSlider" name="opacitySlider">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>138</y>
+      <x>118</x>
+      <y>149</y>
       <width>160</width>
       <height>22</height>
      </rect>
@@ -1027,8 +1027,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>143</y>
+      <x>78</x>
+      <y>154</y>
       <width>56</width>
       <height>12</height>
      </rect>
@@ -1046,8 +1046,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QCheckBox" name="fixCheck">
     <property name="geometry">
      <rect>
-      <x>302</x>
-      <y>139</y>
+      <x>300</x>
+      <y>150</y>
       <width>81</width>
       <height>16</height>
      </rect>
