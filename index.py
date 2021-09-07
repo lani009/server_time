@@ -225,9 +225,12 @@ class Query:
         while URL[len(URL)-1] == '/':
             URL = URL[:-1]
 
-        if URL[:7] != "http://":
+        if URL[:7] != "http://" and URL[:8] != "https://":
             URL = "http://" + URL
-        req = requests.get(URL+"/fjdksla")
+
+        magic_keyword = "/fjdksla"
+        req = requests.get(URL+magic_keyword)
+        self.app.url.setText(req.url[:-len(magic_keyword)])
         originSec = req.headers["Date"][23:25]
         self.app.progressBar.setValue(10)
         # 지연된 시간
