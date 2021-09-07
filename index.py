@@ -220,8 +220,13 @@ class Query:
         self.app = App
         self.sync_time(URL)
 
-    def sync_time(self, URL):
+    def sync_time(self, URL: str):
         '''서버와의 시간을 동조'''
+        while URL[len(URL)-1] == '/':
+            URL = URL[:-1]
+
+        if URL[:7] != "http://":
+            URL = "http://" + URL
         req = requests.get(URL+"/fjdksla")
         originSec = req.headers["Date"][23:25]
         self.app.progressBar.setValue(10)
