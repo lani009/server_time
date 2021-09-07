@@ -7,10 +7,10 @@ from winsound import Beep
 
 import requests
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, pyqtSlot, QTimer
+from PyQt5.QtGui import QIcon, QTextCursor, QFocusEvent, QGuiApplication, QClipboard
 from PyQt5.QtWidgets import (QApplication, QGraphicsOpacityEffect, QMainWindow,
-                             QMessageBox, QProgressBar)
+                             QMessageBox, QProgressBar, QVBoxLayout, QLineEdit, QTextBrowser)
 
 
 def resource_path(relative_path):
@@ -27,6 +27,13 @@ ICON = 'ui/icon.png'
 __AUTHOR__ = "Lani"
 
 
+class CopyEditBox(QLineEdit):
+    def focusInEvent(self, a0: QFocusEvent):
+        QTimer.singleShot(0, self.selectAll)
+        QGuiApplication.clipboard().setText(self.text())
+        return super().focusInEvent(a0)
+
+
 class App(QMainWindow):
 
     clockSignal = pyqtSignal()
@@ -41,12 +48,23 @@ class App(QMainWindow):
         self.ui = uic.loadUi(resource_path(UIFILE), self)
         self.setWindowTitle("서버시간 알리미")
         self.setWindowIcon(QIcon(resource_path(ICON)))
-        self.setFixedSize(800, 200)  # 사이즈 고정
+        self.setFixedSize(980, 200)  # 사이즈 고정
 
         # Progress Bar의 투명도 조절을 위함
         self.opacity = QGraphicsOpacityEffect(self.progressBar)
         self.opacity.setOpacity(0.0)  # 시작 시에는 Progress Bar 안보이도록 처리
         self.progressBar.setGraphicsEffect(self.opacity)
+
+    def initCopyBoard(self):
+        self.copyLayout: QVBoxLayout
+
+        copyBoxList = []
+
+        for _ in range(5):
+            copyBox = CopyEditBox()
+            copyBox.setMinimumSize(0, 28)
+            self.copyLayout.addWidget(copyBox)
+            copyBoxList.append(copyBox)
 
     @pyqtSlot()
     def opacityChanged(self):
@@ -154,6 +172,7 @@ class App(QMainWindow):
     def updateClock(self, severTime):
         self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(
             severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
+        self.severTime.setAlignment(Qt.AlignCenter)
         if self.doAlarm:
             self.alarmTime = self.alarmTime.replace(
                 year=severTime.year, month=severTime.month, day=severTime.day)
@@ -239,5 +258,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()
     ex.initUI()
+    ex.initCopyBoard()
     ex.show()
     sys.exit(app.exec_())

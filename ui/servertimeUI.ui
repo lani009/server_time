@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>210</height>
+    <width>958</width>
+    <height>424</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -67,9 +67,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>80</y>
+      <y>90</y>
       <width>741</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="infoLayout" rowstretch="2" columnstretch="0,1">
@@ -80,7 +80,7 @@
       <number>10</number>
      </property>
      <property name="topMargin">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="rightMargin">
       <number>10</number>
@@ -136,12 +136,21 @@ p, li { white-space: pre-wrap; }
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
        <property name="html">
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'맑은 고딕'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;성공기원!!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="placeholderText">
+        <string>성공 기원!!!</string>
        </property>
       </widget>
      </item>
@@ -1000,7 +1009,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>118</x>
-      <y>149</y>
+      <y>156</y>
       <width>160</width>
       <height>22</height>
      </rect>
@@ -1028,7 +1037,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>78</x>
-      <y>154</y>
+      <y>161</y>
       <width>56</width>
       <height>12</height>
      </rect>
@@ -1047,7 +1056,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>150</y>
+      <y>157</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -1061,6 +1070,17 @@ p, li { white-space: pre-wrap; }
     <property name="text">
      <string>화면고정</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>10</y>
+      <width>160</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="copyLayout"/>
    </widget>
    <zorder>label_4</zorder>
    <zorder>query</zorder>
@@ -1077,13 +1097,14 @@ p, li { white-space: pre-wrap; }
    <zorder>alarmSecond</zorder>
    <zorder>opacitySlider</zorder>
    <zorder>fixCheck</zorder>
+   <zorder>verticalLayoutWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>958</width>
      <height>21</height>
     </rect>
    </property>
@@ -1139,7 +1160,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>164</y>
+     <y>185</y>
     </hint>
     <hint type="destinationlabel">
      <x>69</x>
@@ -1171,7 +1192,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>319</x>
-     <y>166</y>
+     <y>186</y>
     </hint>
     <hint type="destinationlabel">
      <x>477</x>
@@ -1186,5 +1207,6 @@ p, li { white-space: pre-wrap; }
   <slot>opacityChanged(int)</slot>
   <slot>fixWindow(int)</slot>
   <slot>isEnter()</slot>
+  <slot>test()</slot>
  </slots>
 </ui>

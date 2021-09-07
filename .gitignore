@@ -1,11 +1,6 @@
 #vscode
 .vscode
 
-test.py
-
-배포
-*.bat
-
 #pyinstaller
 __pycache__
 build
