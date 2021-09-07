@@ -24,3 +24,9 @@
 ## 2. 사용 후기
 
 개발자 및 주변인의 수강신청 올클 소식 다수
+
+## 3. 다운로드
+
+https://github.com/lani009/server_time/releases/download/v2.3/Server_Time.exe
+
+https://github.com/lani009/server_time/releases/
