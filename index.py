@@ -169,14 +169,14 @@ class App(QMainWindow):
         self.alarmThread = threading.Thread(
             target=self.alarm)  # 알람 울릴거 대비해서 미리 쓰레드 선언 해놓음
 
-    def updateClock(self, severTime):
-        self.severTime.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(
-            severTime.year, severTime.month, severTime.day, severTime.hour, severTime.minute, severTime.second))
-        self.severTime.setAlignment(Qt.AlignCenter)
+    def updateClock(self, serverTime):
+        self.serverTimeText.setText("{}년 {}월 {}일 {}시 {}분 {}초".format(
+            serverTime.year, serverTime.month, serverTime.day, serverTime.hour, serverTime.minute, serverTime.second))
+        self.serverTimeText.setAlignment(Qt.AlignCenter)
         if self.doAlarm:
             self.alarmTime = self.alarmTime.replace(
-                year=severTime.year, month=severTime.month, day=severTime.day)
-            self.checkAlarm(severTime)
+                year=serverTime.year, month=serverTime.month, day=serverTime.day)
+            self.checkAlarm(serverTime)
 
     def checkAlarm(self, severTime):
         '''알람 울릴 시간이 되면, 알람 쓰레드 생성시킴.'''
@@ -217,37 +217,37 @@ class ServerClock(QThread):
 class Query:
 
     def __init__(self, URL, App):
-        self.__App = App
-        self.__syncTime(URL)
+        self.app = App
+        self.sync_time(URL)
 
-    def __syncTime(self, URL):
+    def sync_time(self, URL):
         '''서버와의 시간을 동조'''
         req = requests.get(URL+"/fjdksla")
         originSec = req.headers["Date"][23:25]
-        self.__App.progressBar.setValue(10)
+        self.app.progressBar.setValue(10)
         # 지연된 시간
-        self.elapsedTime = req.elapsed
+        self.elapsed_time = req.elapsed
         cnt = 1
         while True:
             # 서버로 부터 시간을 받아와 반복문을 통해 시간 오차를 줄인다.
             req = requests.get(URL)
             laterSec = req.headers["Date"][23:25]
-            self.elapsedTime += req.elapsed
+            self.elapsed_time += req.elapsed
             cnt += 1
             QProgressBar.value
-            self.__App.progressBar.setValue(self.__App.progressBar.value() + 7)
+            self.app.progressBar.setValue(self.app.progressBar.value() + 7)
             if(originSec != laterSec):
                 break
-        self.elapsedTime /= cnt
-        self.__setTime(req.headers['Date'])
+        self.elapsed_time /= cnt
+        self.set_time(req.headers['Date'])
 
-    def __setTime(self, stringTime):
+    def set_time(self, stringTime):
         '''String 시간을 ms로 전환'''
         # 서울, 도쿄를 기준으로 +9시간
         koreanTime = datetime.datetime.strptime(
-            stringTime, "%a, %d %b %Y %X GMT") + datetime.timedelta(hours=9) - self.elapsedTime
+            stringTime, "%a, %d %b %Y %X GMT") + datetime.timedelta(hours=9) - self.elapsed_time
         self.__timeDelta = koreanTime - datetime.datetime.now()
-        self.__App.progressBar.setValue(70)
+        self.app.progressBar.setValue(70)
 
     def getTime(self):
         severTime = self.__timeDelta + datetime.datetime.now()
