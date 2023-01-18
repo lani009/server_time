@@ -107,7 +107,6 @@ class App(QMainWindow):
                 self.query = Query(self.url.toPlainText(), self)
             except Exception as e:
                 self.url.setText("")
-                print(e)
                 QMessageBox().critical(self, "주소로 부터 응답 없음", "옳지 않은 주소이거나, 인터넷 상태가 불량합니다")
                 self.progressBar.setValue(100)
                 self.opacity.setOpacity(0.0)  # Go 버튼 클릭시 Progress Bar 활성화
@@ -216,7 +215,7 @@ class ServerClock(QThread):
 
 class Query:
 
-    def __init__(self, URL, App):
+    def __init__(self, URL: str, App):
         self.app = App
         self.sync_time(URL)
 
@@ -225,7 +224,7 @@ class Query:
         while URL[len(URL)-1] == '/':
             URL = URL[:-1]
 
-        if URL[:7] != "http://" and URL[:8] != "https://":
+        if not (URL.startswith("http://") or URL.startswith("https://")):
             URL = "http://" + URL
 
         magic_keyword = "/fjdksla"
